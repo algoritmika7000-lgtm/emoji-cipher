@@ -5,29 +5,34 @@
 <title>✧ Шифр с кодовым словом ✧</title>
 
 <style>
-body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg,#f3f0ff,#ffece3);
+body{
+    margin:0;
+    font-family:Arial;
+    background:url("https://preview.redd.it/zlwl0qbfqv681.jpg?width=1080&crop=smart&auto=webp&s=2ccb0154d7ae8ca67af15268d38ea9ad14babd78") no-repeat center center fixed;
+    background-size:cover;
+}
+
+.overlay{
+    background:rgba(248,247,255,0.85);
+    min-height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
-    height:100vh;
-    margin:0;
 }
 
-.container {
+.card{
     background:white;
     padding:30px;
     border-radius:15px;
-    width:800px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.1);
+    width:900px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.2);
 }
 
-h2 {
-    margin-top:20px;
+h2{
+    margin-top:0;
 }
 
-input {
+input{
     width:100%;
     padding:10px;
     margin-top:5px;
@@ -37,54 +42,74 @@ input {
     font-size:14px;
 }
 
-button {
+button{
     padding:10px 15px;
     border:none;
     border-radius:8px;
-    background:#6a5acd;
-    color:white;
     cursor:pointer;
-    margin-top:5px;
+    color:white;
+    font-weight:bold;
 }
 
-button:hover {
-    opacity:0.9;
+.encryptBtn{ background:#6a5acd; }
+.decryptBtn{ background:#dc7850; }
+.loginBtn{ background:#6a5acd; width:100%; }
+
+.section{
+    margin-top:25px;
+    padding:15px;
+    border-radius:10px;
 }
 
-.section {
-    margin-bottom:30px;
+.encryptSection{ background:#eeeaff; }
+.decryptSection{ background:#fff2eb; }
+
+#error{
+    color:red;
+    font-weight:bold;
 }
+.hidden{ display:none; }
 </style>
 </head>
-
 <body>
 
-<div class="container">
+<div class="overlay">
+
+<!-- LOGIN -->
+<div id="loginCard" class="card">
+    <h2>🔑 Вход</h2>
+    <label>Пароль:</label>
+    <input type="password" id="passwordInput">
+    <button class="loginBtn" onclick="login()">Войти</button>
+    <p id="error"></p>
+</div>
+
+<!-- MAIN -->
+<div id="mainCard" class="card hidden">
 
 <h1>🔐 Шифр с кодовым словом</h1>
 
-<div class="section">
-<h2>Шифрование</h2>
+<div class="section encryptSection">
+<h2>🔐 Шифрование</h2>
 <label>Кодовое слово:</label>
 <input id="encryptKey">
 
 <label>Сообщение:</label>
 <input id="encryptInput">
 
-<button onclick="encrypt()">Зашифровать</button>
+<button class="encryptBtn" onclick="encrypt()">Зашифровать</button>
 
 <label>Результат:</label>
 <input id="encryptOutput" readonly>
 </div>
 
-
-<div class="section">
-<h2>Дешифрование</h2>
+<div class="section decryptSection">
+<h2>📨 Дешифрование</h2>
 
 <label>Зашифрованное сообщение:</label>
 <input id="decryptInput">
 
-<button onclick="decrypt()">Дешифровать</button>
+<button class="decryptBtn" onclick="decrypt()">Дешифровать</button>
 
 <label>Кодовое слово:</label>
 <input id="decryptKey" readonly>
@@ -94,8 +119,22 @@ button:hover {
 </div>
 
 </div>
+</div>
 
 <script>
+
+// ===== ПАРОЛИ =====
+const passwords = ["minecraft","creeper","steve"];
+
+function login(){
+    const pass = document.getElementById("passwordInput").value;
+    if(passwords.includes(pass)){
+        document.getElementById("loginCard").classList.add("hidden");
+        document.getElementById("mainCard").classList.remove("hidden");
+    }else{
+        document.getElementById("error").innerText="Неверный пароль!";
+    }
+}
 
 // ===== ШИФР =====
 
@@ -193,6 +232,5 @@ function decrypt(){
 }
 
 </script>
-
 </body>
 </html>
