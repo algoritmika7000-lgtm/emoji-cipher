@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>✧ Шифр с кодовым словом ✧</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#f3f0ff,#ffece3);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    margin:0;
+}
+
+.container {
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    width:800px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+h2 {
+    margin-top:20px;
+}
+
+input {
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+    margin-bottom:15px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    font-size:14px;
+}
+
+button {
+    padding:10px 15px;
+    border:none;
+    border-radius:8px;
+    background:#6a5acd;
+    color:white;
+    cursor:pointer;
+    margin-top:5px;
+}
+
+button:hover {
+    opacity:0.9;
+}
+
+.section {
+    margin-bottom:30px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🔐 Шифр с кодовым словом</h1>
+
+<div class="section">
+<h2>Шифрование</h2>
+<label>Кодовое слово:</label>
+<input id="encryptKey">
+
+<label>Сообщение:</label>
+<input id="encryptInput">
+
+<button onclick="encrypt()">Зашифровать</button>
+
+<label>Результат:</label>
+<input id="encryptOutput" readonly>
+</div>
+
+
+<div class="section">
+<h2>Дешифрование</h2>
+
+<label>Зашифрованное сообщение:</label>
+<input id="decryptInput">
+
+<button onclick="decrypt()">Дешифровать</button>
+
+<label>Кодовое слово:</label>
+<input id="decryptKey" readonly>
+
+<label>Расшифрованное сообщение:</label>
+<input id="decryptOutput" readonly>
+</div>
+
+</div>
+
+<script>
+
+// ===== ШИФР =====
+
+const letters = [
+"А","Б","В","Г","Д","Е","Ё","Ж","З","И","Й","К","Л","М",
+"Н","О","П","Р","С","Т","У","Ф","Х","Ц","Ч","Ш","Щ","Ъ","Ы",
+"Ь","Э","Ю","Я"
+];
+
+const smiles = [
+":)", ";)", ":D", ":P", ":O", ":|", ":(", ":/", ":||", ":*",
+"^_^", "-_-", "o_O", "O_o", "<3", "</3",
+"XD", "xD", ":3", ":>", ":<",
+"|)", "|(", "||", "|-", "|=:",
+":-)", ":-(", ";-)", ":-D", ":-P", ":-O", "))"
+];
+
+let encryptMap = {};
+let decryptMap = {};
+
+for(let i=0;i<letters.length;i++){
+    encryptMap[letters[i]] = smiles[i];
+    decryptMap[smiles[i]] = letters[i];
+}
+
+// ===== КЛЮЧИ =====
+
+const keyToCode = {
+"МЕЧ":"псс",
+"КИРКА":"ппссс",
+"ЛОПАТА":"ппс",
+"МОТЫГА":"ппсс",
+"ЛУК":"пппннн",
+"ЩИТ":"ддддддс",
+"УДОЧКА":"пппнн",
+"НОЖНИЦЫ":"сс",
+"ВЕДРО":"ссс",
+"ОГНИВО":"ск",
+"КОМПАС":"сссср",
+"ЧАСЫ":"ззззр",
+"АРБАЛЕТ":"пппннск"
+};
+
+let codeToKey = {};
+for(let key in keyToCode){
+    codeToKey[keyToCode[key]] = key;
+}
+
+// ===== ФУНКЦИИ =====
+
+function encrypt(){
+    let key = document.getElementById("encryptKey").value.toUpperCase();
+    let code = keyToCode[key] || "спс";
+
+    let text = document.getElementById("encryptInput").value.toUpperCase();
+    let result = "";
+
+    for(let char of text){
+        result += encryptMap[char] || char;
+    }
+
+    document.getElementById("encryptOutput").value = code + " " + result;
+}
+
+function decrypt(){
+    let text = document.getElementById("decryptInput").value;
+    let space = text.indexOf(" ");
+    if(space === -1) return;
+
+    let code = text.substring(0,space);
+    let message = text.substring(space+1);
+
+    document.getElementById("decryptKey").value = codeToKey[code] || "Пишет шпион";
+
+    let result = "";
+    let i=0;
+
+    while(i < message.length){
+        let found=false;
+        for(let smile in decryptMap){
+            if(message.startsWith(smile,i)){
+                result += decryptMap[smile];
+                i += smile.length;
+                found=true;
+                break;
+            }
+        }
+        if(!found){
+            result += message[i];
+            i++;
+        }
+    }
+
+    document.getElementById("decryptOutput").value = result;
+}
+
+</script>
+
+</body>
+</html>
